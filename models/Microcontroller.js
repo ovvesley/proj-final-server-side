@@ -17,6 +17,6 @@ const microcontrollerSchema = new mongoose.Schema({
   ],
 });
 
-mongoose.model("Microcontroller", microcontrollerSchema);
+var Microcontroller = mongoose.model("Microcontroller", microcontrollerSchema);
 
 module.exports = Microcontroller;

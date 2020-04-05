@@ -18,6 +18,6 @@ const systemSchema = new mongoose.Schema({
   ],
 });
 
-mongoose.model("System", systemSchema);
+var System = mongoose.model("System", systemSchema);
 
 module.exports = System;
