@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const MicrocontrollerSchema = require('./Microcontroller'); 
 
 const systemSchema = new mongoose.Schema({
   nameSystem: {
@@ -12,8 +13,8 @@ const systemSchema = new mongoose.Schema({
   },
   microcontroller: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Microcontroller",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: MicrocontrollerSchema,
     },
   ],
 });

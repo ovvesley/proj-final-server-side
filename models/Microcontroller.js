@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const SensorSchema = require('./Sensor');
 
 const microcontrollerSchema = new mongoose.Schema({
   nameMicrocontroller: {
@@ -11,8 +12,8 @@ const microcontrollerSchema = new mongoose.Schema({
   },
   sensors: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "Sensor",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: SensorSchema,
     },
   ],
 });

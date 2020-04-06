@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const AccountPlanSchema = require('./AccountPlan'); 
+const SystemSchema = require('./System');
 
 const userSchema = new mongoose.Schema({
   login: {
@@ -14,14 +16,14 @@ const userSchema = new mongoose.Schema({
   experienceDays: {
     type: Number,
   },
-  acconutPlanType: {
-    type: Schema.Types.ObjectId,
-    ref: "AccountPlan",
+  accountPlanType: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: AccountPlanSchema,
   },
   systems: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "System",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: SystemSchema,
     },
   ],
 });
