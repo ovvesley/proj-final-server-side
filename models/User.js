@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const AccountPlanSchema = require('./AccountPlan'); 
 const SystemSchema = require('./System');
+const bcrypt = require('bcrypt');
+
 
 const userSchema = new mongoose.Schema({
   login: {
@@ -27,6 +29,15 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
+userSchema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+
+userSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 var User = mongoose.model("User", userSchema);
 

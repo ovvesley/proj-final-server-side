@@ -49,9 +49,12 @@ router
           msg: `Já existe um usuario com o login '${login}'. Tente outro por favor.`,
         });
       } else {
-        let newUser = { login, password };
-        await User.create(newUser);
-        console.log(`--signUp> Usuario [ ${login} ] inicio um cadastro na plataforma.` );
+        var newUser = new User({login});
+        newUser.password = newUser.generateHash(password);
+        (await newUser).save();
+        console.log(
+          `--signUp> Usuario [ ${login} ] inicio um cadastro na plataforma.`
+        );
         return res.json({
           status: "success",
           msg: "Usuario cadastrado com sucesso.",
