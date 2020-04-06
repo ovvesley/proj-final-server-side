@@ -43,26 +43,6 @@ connect
     );
   });
 
-//  const UserSchema = require("./models/User");
-//  const newUser = new UserSchema({
-//    login: "amaral",
-//    password: "senha",
-//    experienceDays: 80000,
-//    accountPlanType: { _id: "5e8a7c8f03adef5b9981b842" },
-//    systems: [{ _id: "5e8a7e34a232365ca08c0cfd" }],
-//  });
-//  newUser.save().then(() => console.log("user criado")).catch((err)=> console.log(err));
-
-// const SystemSchema  = require('./models/System');
-// const newSystem = new SystemSchema({
-//   nameSystem: 'Sistema1',
-//   category: 'caterogia',
-//   microcontroller: [{
-//     _id:'5e8a71edd5beb943d91f1866'
-//   }],
-// });
-// newSystem.save().then(() => console.log('meow')).catch((err)=> console.log(err));
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
