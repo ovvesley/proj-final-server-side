@@ -4,61 +4,18 @@
 */
 
 /** Dependencies necessary for the application */
-
-/** Express dependency
- * @external express
- * @see {@link https://expressjs.com/}
- */
 var express = require("express");
-/**
- * Mongoose dependency
- * @external mongoose
- * @see {@link https://mongoosejs.com/}
- */
 var mongoose = require("mongoose");
-
-/**
- *  Http-errors dependency
- * @external createError
- * @see {@link https://www.npmjs.com/package/http-errors}
-*/
 var createError = require("http-errors");
-
-/**
- * Core module of Node.js
- * @external path
- * @see {@link https://nodejs.org/docs/latest/api/path.html#path_path}
- */
 var path = require("path");
-
-/**
- * Cookie-parser dependency 
- * @external cookieParser
- * @see {@link https://www.npmjs.com/package/cookie-parser}
- */
 var cookieParser = require("cookie-parser");
-
-/**
- * Morgan dependency
- * @external logger
- * @see {@link https://www.npmjs.com/package/morgan}
- */
 var logger = require("morgan");
 
-/**
- * Configuration module for the connection to the db via Mongoose
- * @requires module:config
- * @see {@link module:config}
- * @type {DbConfiguration}*/
 var config = require("./config");
+const swagger = require('./swagger');
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
-
-/**
- * Express generator
- * @see external:express 
- */
 var app = express();
 
 const url = config.mongoUrl;
@@ -109,10 +66,7 @@ app.use("/docs", express.static('./docs/'));
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 
-/**Swagger
- * testing the swagger documentation
- */
-const swagger = require('./swagger');
+/**Swagger*/
 app.use("/apitest", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
 
 /**  Catch 404 and forward to error handler*/

@@ -1,6 +1,6 @@
 /**
  * Module for Account Plan Schema
- * @module AccountPlan
+ * @module 
  * @author Gabriel Amaral 
  */
 const mongoose = require("mongoose");

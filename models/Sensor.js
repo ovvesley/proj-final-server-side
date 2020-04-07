@@ -1,6 +1,6 @@
 /**
  * Module for Sensor Schema
- * @module Sensor
+ * @module 
  * @author Gabriel Amaral
  */
 const mongoose = require("mongoose");

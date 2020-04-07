@@ -1,7 +1,7 @@
 /**
  * Module for User Schema. This module requires the modules {@link module:AccountPlan} 
  * and {@link module:System }
- * @module User
+ * @module
  * @requires module:AccountPlan
  * @requires module:System
  * @author Gabriel Amaral

@@ -1,6 +1,6 @@
 /**
  * Module for System Schema. This module requires the module {@link module:Microcontroller}
- * @module System
+ * @module 
  * @requires module:Microcontroller
  * @author Gabriel Amaral
  */

@@ -1,7 +1,7 @@
 /**
  * Module for Microcontroller Schema. This module requires the module {@link module:Sensor}
- * @module Microcontroller
- * @requires module:Sensor
+ * @module
+ * @requires module:models/sensor.js
  * @author Gabriel Amaral
  */
 const mongoose = require("mongoose");
