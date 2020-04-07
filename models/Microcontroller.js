@@ -1,7 +1,18 @@
+/**
+ * Module for Microcontroller Schema. This module requires the module {@link module:Sensor}
+ * @module Microcontroller
+ * @requires module:Sensor
+ * @author Gabriel Amaral
+ */
 const mongoose = require("mongoose");
+
 const SensorSchema = require('./Sensor');
 
-const microcontrollerSchema = new mongoose.Schema({
+/**
+ * MicrocontrollerSchema schema
+ * @class Microcontroller
+ */
+const MicrocontrollerSchema = new mongoose.Schema({
   nameMicrocontroller: {
     type: String,
     default: "",
@@ -18,6 +29,6 @@ const microcontrollerSchema = new mongoose.Schema({
   ],
 });
 
-var Microcontroller = mongoose.model("Microcontroller", microcontrollerSchema);
+var Microcontroller = mongoose.model("Microcontroller", MicrocontrollerSchema);
 
 module.exports = Microcontroller;

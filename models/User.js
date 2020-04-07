@@ -1,8 +1,21 @@
+/**
+ * Module for User Schema. This module requires the modules {@link module:AccountPlan} 
+ * and {@link module:System }
+ * @module User
+ * @requires module:AccountPlan
+ * @requires module:System
+ * @author Gabriel Amaral
+ */
+
 const mongoose = require("mongoose");
 const AccountPlanSchema = require('./AccountPlan'); 
 const SystemSchema = require('./System');
 
-const userSchema = new mongoose.Schema({
+/**
+ * UserSchema schema
+ * @class User
+ */
+const UserSchema = new mongoose.Schema({
   login: {
     type: String,
     trim: true,
@@ -28,6 +41,6 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-var User = mongoose.model("User", userSchema);
+var User = mongoose.model("User", UserSchema);
 
 module.exports = User;

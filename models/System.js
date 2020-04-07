@@ -1,7 +1,17 @@
+/**
+ * Module for System Schema. This module requires the module {@link module:Microcontroller}
+ * @module System
+ * @requires module:Microcontroller
+ * @author Gabriel Amaral
+ */
 const mongoose = require("mongoose");
 const MicrocontrollerSchema = require('./Microcontroller'); 
 
-const systemSchema = new mongoose.Schema({
+/**
+ * SystemSchema schema
+ * @class System
+ */
+const SystemSchema = new mongoose.Schema({
   nameSystem: {
     type: String,
     trim: true,
@@ -19,6 +29,6 @@ const systemSchema = new mongoose.Schema({
   ],
 });
 
-var System = mongoose.model("System", systemSchema);
+var System = mongoose.model("System", SystemSchema);
 
 module.exports = System;

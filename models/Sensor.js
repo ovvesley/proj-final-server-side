@@ -1,6 +1,15 @@
+/**
+ * Module for Sensor Schema
+ * @module Sensor
+ * @author Gabriel Amaral
+ */
 const mongoose = require("mongoose");
 
-const sensorSchema = new mongoose.Schema({
+/**
+ * SensorSchema schema
+ * @class Sensor
+ */
+const SensorSchema = new mongoose.Schema({
   nameSensor: {
     type: String,
     trim: true,
@@ -17,6 +26,6 @@ const sensorSchema = new mongoose.Schema({
   },
 });
 
-var Sensor = mongoose.model("Sensor", sensorSchema);
+var Sensor = mongoose.model("Sensor", SensorSchema);
 
 module.exports = Sensor;

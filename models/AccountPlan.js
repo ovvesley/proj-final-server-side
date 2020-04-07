@@ -1,6 +1,16 @@
+/**
+ * Module for Account Plan Schema
+ * @module AccountPlan
+ * @author Gabriel Amaral 
+ */
 const mongoose = require("mongoose");
 
-const accountPlanSchema = new mongoose.Schema({
+/**
+ * AccountPlanSchema schema
+ * @class AccountPlan
+ */
+
+const AccountPlanSchema = new mongoose.Schema({
   namePlan: {
     type: String,
     trim: true,
@@ -16,7 +26,7 @@ const accountPlanSchema = new mongoose.Schema({
   },
 });
 
-var AccountPlan = mongoose.model("AccountPlan", accountPlanSchema);
+var AccountPlan = mongoose.model("AccountPlan", AccountPlanSchema);
 
 
 module.exports = AccountPlan;
