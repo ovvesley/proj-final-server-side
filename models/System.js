@@ -21,7 +21,7 @@ const SystemSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  microcontroller: [
+  microcontrollers: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: MicrocontrollerSchema,

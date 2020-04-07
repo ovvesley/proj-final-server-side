@@ -28,6 +28,7 @@ const UserSchema = new mongoose.Schema({
   },
   experienceDays: {
     type: Number,
+    default: 0,
   },
   accountPlanType: {
     type: mongoose.Schema.Types.ObjectId,

@@ -109,6 +109,12 @@ app.use("/docs", express.static('./docs/'));
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 
+/**Swagger
+ * testing the swagger documentation
+ */
+const swagger = require('./swagger');
+app.use("/apitest", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
+
 /**  Catch 404 and forward to error handler*/
 app.use(function (req, res, next) {
   next(createError(404));
