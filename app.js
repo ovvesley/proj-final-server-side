@@ -16,6 +16,8 @@ const swagger = require('./swagger');
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
+var signupRouter = require("./routes/services/signup");
+
 var app = express();
 
 const url = config.mongoUrl;
@@ -70,6 +72,9 @@ app.use("/user", userRouter);
 app.use("/apitest", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
 
 /**  Catch 404 and forward to error handler*/
+app.use("/signUp", signupRouter);
+
+// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
