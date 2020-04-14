@@ -3,108 +3,6 @@ var router = express.Router();
 var mongoose = require("mongoose");
 var UserSchema = require("../models/User");
 
-/**Documentation config */
-/**
- * @swagger
- *
- * definitions:
- *   Sensor:
- *     type: object
- *     required: 
- *       - nameSensor
- *       - digitalValue
- *       - analogValue
- *       - portNumber
- *     properties:
- *       nameSensor:
- *         type: string
- *       digitalValue: 
- *         type: number
- *       analogValue:
- *         type: number
- *       portNumber:
- *         type: number
- *       
- *   Microcontroller:
- *     type: object
- *     required: 
- *       - nameMicrocontroller
- *       - type
- *       - sensors
- *     properties:
- *       nameMicrocontroller:
- *         type: string
- *       type: 
- *         type: string
- *       sensors: 
- *         type: array
- *         items: 
- *          type: object
- *          allOf: 
- *           - $ref: '#/definitions/Sensor'
- * 
- *   System:
- *     type: object
- *     required: 
- *       - nameSystem
- *       - category
- *       - microcontrollers
- *     properties:
- *       nameSystem:
- *         type: string
- *       category: 
- *         type: string
- *       microcontrollers: 
- *         type: array
- *         items: 
- *          type: object
- *          allOf: 
- *           - $ref: '#/definitions/Microcontroller'
- *  
- *   AccountPlan:
- *     type: object
- *     required: 
- *       - namePlan
- *       - price
- *       - description
- *     properties:
- *       namePlan:
- *         type: string
- *       price: 
- *         type: number
- *       description:
- *         type: string
- * 
- *   User:
- *     type: object
- *     required:
- *       - login
- *       - password
- *       - accountPlanType
- *     properties:
- *       login:
- *         type: string
- *       password:
- *         type: string
- *         format: password
- *       experienceDays:
- *         type: number
- *       accountPlanType:
- *          type: object
- *          allOf: 
- *            - $ref: '#/definitions/AccountPlan'
- *       systems: 
- *         type: array
- *         items: 
- *          type: object
- *          allOf: 
- *           - $ref: '#/definitions/Sensor'
- *
- *
- */
-
-
-
 /**
  * @swagger
  * /user: 
@@ -127,6 +25,7 @@ var UserSchema = require("../models/User");
  *        '400':
  *          description: Error creating new user
  */
+
 router.post("/", async (req, res) => {
   try {
     const newUser = await UserSchema.create(req.body);
@@ -210,7 +109,7 @@ router.put("/:userId", async (req, res) => {
  *        type: string
  *        responses:
  *          '200':
- *            description: User deleted
+ *            description: User deleted            
  *          '400': 
  *            description: Error deleting user
  */
