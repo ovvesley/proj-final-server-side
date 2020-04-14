@@ -1,3 +1,11 @@
+/**
+ * This module is responsible for managing the user sign. 
+ * Mainly used by the frontend in the user registry.
+ * 
+ * @file
+ * @module
+ * @author Wesley Ferreira <wsf.ley@gmail.com>
+ */
 var express = require("express");
 
 var User = require("../../models/User");
@@ -49,7 +57,7 @@ router
           msg: `Já existe um usuario com o login '${login}'. Tente outro por favor.`,
         });
       } else {
-        var newUser = new User({login});
+        var newUser = new User({ login });
         newUser.password = newUser.generateHash(password);
         (await newUser).save();
         console.log(
