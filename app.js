@@ -64,12 +64,11 @@ app.use(express.static(path.join(__dirname, "public")));
 /**Routes */
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+app.use("/signUp", signupRouter);
 
 /**Swagger*/
-app.use("/apitest", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
+app.use("/docs/swagger-doc", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
 
-/**  Catch 404 and forward to error handler*/
-app.use("/signUp", signupRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
