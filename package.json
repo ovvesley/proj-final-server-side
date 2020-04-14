@@ -5,7 +5,7 @@
   "scripts": {
     "start": "DEBUG=hortabackend:* node ./bin/www",
     "dev": "DEBUG=hortabackend:* nodemon ./bin/www",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json -r"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
