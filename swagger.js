@@ -7,11 +7,10 @@ const swaggerOptions = {
           description: "Documentation referencing to the routes",
           contact:{
               name: 'Bryant 24',
-          },
-          servers: ['http://localhost:3000'],
+          }
       }
   },
-  apis: ["./routes/*.js"],
+  apis: ["./routes/*.js", "./routes/services/*.js", "./tools/yamls-definitions/*.yaml"],
 }; 
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
