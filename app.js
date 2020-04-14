@@ -61,9 +61,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-/**Web documentation */
-app.use("/docs", express.static('./docs/'));
-
 /**Routes */
 app.use("/", indexRouter);
 app.use("/user", userRouter);
