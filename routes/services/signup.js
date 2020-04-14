@@ -1,7 +1,7 @@
 /**
- * This module is responsible for managing the user sign. 
+ * This module is responsible for managing the user sign.
  * Mainly used by the frontend in the user registry.
- * 
+ *
  * @file
  * @module
  * @author Wesley Ferreira <wsf.ley@gmail.com>
@@ -12,6 +12,38 @@ var User = require("../../models/User");
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /signUp:
+ *    post:
+ *      tags:
+ *      - user
+ *      summary: Create a user
+ *      description: Register a new user on the database via sign up page
+ *      consumes:
+ *      - "application/json"
+ *      produces:
+ *      - "application/json"
+ *      parameters:
+ *      - in: body
+ *        name: body
+ *        description: user object to create
+ *        required: true
+ *        schema:
+ *          $ref: "#/definitions/UserLogin"
+ *
+ *      responses:
+ *        200:
+ *          description: Success on creating the new user
+ *          schema:
+ *            $ref: '#/definitions/SuccessMessage'
+ * 
+ *        403:
+ *          description: Error deleting user
+ *          schema:
+ *            $ref: '#/definitions/ErrorMessage'
+ *          
+ */
 router
   .route("/")
   .get((req, res) => {
