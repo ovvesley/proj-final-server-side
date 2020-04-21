@@ -37,12 +37,12 @@ const router = express.Router();
  *          description: Success on creating the new user
  *          schema:
  *            $ref: '#/definitions/SuccessMessage'
- * 
+ *
  *        403:
  *          description: Error deleting user
  *          schema:
  *            $ref: '#/definitions/ErrorMessage'
- *          
+ *
  */
 router
   .route("/")
@@ -91,10 +91,8 @@ router
       } else {
         var newUser = new User({ login });
         newUser.password = newUser.generateHash(password);
-        (await newUser).save();
-        console.log(
-          `--signUp> Usuario [ ${login} ] inicio um cadastro na plataforma.`
-        );
+        await newUser.save();
+        console.log(`--signUp> Usuario [ ${login} ] iniciou um cadastro na plataforma.`);
         return res.json({
           status: "success",
           msg: "Usuario cadastrado com sucesso.",
