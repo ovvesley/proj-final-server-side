@@ -15,7 +15,8 @@ const SystemSchema = new mongoose.Schema({
   nameSystem: {
     type: String,
     trim: true,
-    default: "",
+    unique: true,
+    required: true,
   },
   category: {
     type: String,

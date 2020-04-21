@@ -21,25 +21,33 @@ const UserSchema = new mongoose.Schema({
   login: {
     type: String,
     trim: true,
-    default: "",
+    unique: true,
+    required: true, 
   },
   password: {
     type: String,
     trim: true,
-    default: "",
+    required: true
+    
   },
   experienceDays: {
     type: Number,
     default: 0,
   },
+  admin:{
+    type: Boolean, 
+    default: false, 
+  },
   accountPlanType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: AccountPlanSchema,
+    required:true
   },
   systems: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: SystemSchema,
+      required:false
     },
   ],
 });

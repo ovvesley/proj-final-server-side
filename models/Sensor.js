@@ -13,7 +13,7 @@ const SensorSchema = new mongoose.Schema({
   nameSensor: {
     type: String,
     trim: true,
-    default: "",
+    required: true, 
   },
   digitalValue: {
     type: Number,

@@ -14,7 +14,8 @@ const AccountPlanSchema = new mongoose.Schema({
   namePlan: {
     type: String,
     trim: true,
-    default: "",
+    unique: true,
+    required: true, 
   },
   price: {
     type: Number,

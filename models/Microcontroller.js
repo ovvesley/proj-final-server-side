@@ -15,16 +15,18 @@ const SensorSchema = require('./Sensor');
 const MicrocontrollerSchema = new mongoose.Schema({
   nameMicrocontroller: {
     type: String,
-    default: "",
+    unique: true,
+    required:true
   },
   type: {
     type: String,
-    default: "",
+    required: true
   },
   sensors: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: SensorSchema,
+      required:false,
     },
   ],
 });
