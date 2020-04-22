@@ -3,9 +3,6 @@ definitions:
     type: object
     required:
       - nameSensor
-      - digitalValue
-      - analogValue
-      - portNumber
     properties:
       nameSensor:
         type: string
@@ -21,7 +18,6 @@ definitions:
     required:
       - nameMicrocontroller
       - type
-      - sensors
     properties:
       nameMicrocontroller:
         type: string
@@ -38,8 +34,6 @@ definitions:
     type: object
     required:
       - nameSystem
-      - category
-      - microcontrollers
     properties:
       nameSystem:
         type: string
@@ -56,8 +50,6 @@ definitions:
     type: object
     required:
       - namePlan
-      - price
-      - description
     properties:
       namePlan:
         type: string
@@ -71,15 +63,18 @@ definitions:
     required:
       - login
       - password
-      - accountPlanType
     properties:
       login:
         type: string
+        unique: true
       password:
         type: string
         format: password
       experienceDays:
         type: number
+      admin: 
+        type: boolean
+        default: false
       accountPlanType:
         type: object
         allOf:
@@ -105,6 +100,37 @@ definitions:
       repassword:
         type: string
         format: password
+  
+  ErrorServer:
+    type: object
+    properties: 
+      error:
+        type: string
+        example: "error.message from server"
+      msg: 
+        type: string
+        example: "Erro na operação! Tente novamente mais tarde!"
+
+  ErrorRequest:
+    type: object
+    properties:
+      error:
+        type: string
+        example: "Something wrong!"
+      msg:
+        type: string
+        example: "Erro na operação! Tente novamente mais tarde!"
+      
+
+  SuccessGeneralMessage:
+    type: object
+    properties: 
+      status: 
+        type: string 
+        example: "Success"
+      msg: 
+        type: string
+        example: "Operação feita com sucesso!"
 
   ErrorMessage:
     type: object
@@ -125,3 +151,19 @@ definitions:
       msg:
         type: string
         example: "Usuario cadastrado com sucesso."
+  
+  SuccessCreateUser:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Usuário criado com sucesso!"
+      user: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/User'
+          
+      
