@@ -28,24 +28,53 @@ var UserModel = require("../models/User");
 
 router.post("/", async (req, res) => {
   try {
-    const { 
-      login, 
-      password 
-    } = req.body;
-    if (!login || !password) {
-      res.status(400);
+    const { login, password } = req.body;
+    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      res.status(403);
       return res.send({
-        msg: "Oops, you forgot the login or password!",
+        error: "Forbidden",
+        msg: "Você não forneceu os dados para criar a conta!",
+      });
+    }
+    if (!login || !password) {
+      res.status(403);
+      return res.send({
+        error: "Forbidden",
+        msg: "Certifique-se de fornecer login e senha!",
+      });
+    } else if (await UserModel.findOne({ login: login })) {
+      res.status(403);
+      return res.send({
+        error: "Forbidden",
+        msg: `O usuário ${login} já existe. Escolha outro!`,
       });
     } else {
       var newUser = new UserModel(req.body);
       newUser.password = newUser.generateHash(password);
-      await UserModel.create(req.body);
-      console.log(newUser);
-      return res.send({ message: "User created successfully", user: newUser });
+      let userCreated = await UserModel.create(newUser);
+      console.log(userCreated);
+      //console.log(newUser);
+      if (!req.body.admin) {
+        return res.send({
+          status: "Success",
+          msg: `Usuário ${login} criado com sucesso`,
+          user: userCreated,
+        });
+      } else {
+        return res.send({
+          status: "Success",
+          msg: `Usuário Administrador ${login} criado com sucesso`,
+          user: userCreated,
+        });
+      }
     }
   } catch (err) {
-    return res.status(400).send({ error: err.message });
+    return res.status(400).send({
+      status: "Bad Request!",
+      msg: `Algo deu errado :(
+         Tente novamente!`,
+      errorMessage: err.message,
+    });
   }
 });
 
@@ -79,29 +108,58 @@ router.post("/", async (req, res) => {
 
 router.put("/:userId", async (req, res) => {
   try {
-    let currentUser = await UserModel.findOne({_id:req.params.userId});
-    
-    if(req.body.constructor === Object && Object.keys(req.body).length === 0){ 
-      res.status(406);
-      return res.send({message: 'Insira informações para atualizar'});
+    let currentUser = await UserModel.findOne({
+      _id: req.params.userId,
+    });
+    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      res.status(403);
+      return res.send({
+        error: "No content",
+        msg: "Forneça dados para serem atualizados!",
+      });
+    }else if(await UserModel.findOne({login: req.body.login})){
+        res.status(403);
+        return res.send({
+          error:"Forbidden",
+          msg:"Login já existente! Escolha outro login!"
+        });
     }
-
-    for (const prop in req.body) {
-      if (req.body.hasOwnProperty(prop) && prop !== 'password') {
-        console.log(req.body[prop]);
-        currentUser[prop] = req.body[prop];
+    else{
+      for (const prop in req.body) {
+        if (req.body.hasOwnProperty(prop) && prop !== "password") {
+          console.log(prop +':'+ req.body[prop]);
+          currentUser[prop] = req.body[prop];
+        }
+        else{
+          var tentarTrocarSenha = true;  
+        }
+      }
+      currentUser.save();
+      res.status(200);
+      if(tentarTrocarSenha){
+        return res.send({
+          msg: `Usuário ${req.body.login} atualizado com sucesso, exceto a senha. Não é possível alterar a senha de um usuário!`,
+          user: currentUser, 
+        });
+      }
+      else{
+        res.status(200);
+        return res.send({
+          status:'Success',
+          msg: `Usuário ${req.body.login} atualizado com sucesso!`,
+          user: currentUser,
+        });
       }
     }
-    currentUser.save();
-
-    res.status(200);
-    return res.send({ message: `Usuário ${req.body.login} atualizado com sucesso`, user: currentUser});
-  } catch (err) {
+  } 
+  catch (err) {
     console.log(err);
-    return res.status(400).send({ message: "Error updating user" });
+    return res.status(400).send({
+      error: 'Bad request!',
+      msg: "Erro na atualização do usuário",
+    });
   }
 });
-
 /**
  * @swagger
  * /user/{userId}:
@@ -128,9 +186,16 @@ router.delete("/:userId", async (req, res) => {
     const id = mongoose.Types.ObjectId(req.params.userId);
     console.log(id);
     await UserModel.findByIdAndRemove(id);
-    return res.send();
+    res.status(200);
+    return res.send({
+      status: "Success",
+      msg: "Usuário removido com sucesso!",
+    });
   } catch (err) {
-    return res.status(400).send({ error: "Error deleting user" });
+    return res.status(400).send({
+      error: "Bad request",
+      msg: "Erro na exclusão do usuário!",
+    });
   }
 });
 

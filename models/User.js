@@ -41,13 +41,11 @@ const UserSchema = new mongoose.Schema({
   accountPlanType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: AccountPlanSchema,
-    required:true
   },
   systems: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: SystemSchema,
-      required:false
     },
   ],
 });
