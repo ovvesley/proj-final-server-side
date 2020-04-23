@@ -1,6 +1,6 @@
 /**
- * This module is responsible for managing the login for user.
- * Mainly used by the frontend in the user login.
+ * This module is responsible for managing the login.
+ * Mainly used by the frontend in the user login page.
  * 
  * @file
  * @module 
@@ -9,7 +9,6 @@
  */
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const UserModel = require("../../models/User");
 const bcrypt = require("bcrypt");
 
@@ -26,7 +25,7 @@ const showUserInfo = (user) => {
  *    tags:
  *    - services
  *    summary: Log the user in via log in page
- *    description: Receives the login and password request and compares with the database to log-in the user
+ *    description: Receives the login and password request and compares with the database to logging in the user
  *    consumes:
  *    - "application/json"
  *    produces:
