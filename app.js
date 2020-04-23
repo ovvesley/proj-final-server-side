@@ -17,6 +17,7 @@ const swagger = require('./swagger');
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var signupRouter = require("./routes/services/signup");
+var loginRouter = require("./routes/services/login");
 
 var app = express();
 
@@ -65,6 +66,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/signUp", signupRouter);
+app.use("/login", loginRouter);
 
 /**Swagger*/
 app.use("/docs/swagger-doc", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
