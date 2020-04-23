@@ -1,11 +1,13 @@
 /**
  * This module is responsible for managing the user routes
  * Check the documentation on swagger
+ *
  * @file
  * @module
- * @author Gabriel Amaral <https://github.com/amaral220x>
- * @author Enzo Zamora <https://github.com/enzo-z>
+ * @author Gabriel Amaral <biel.ilha2021@gmail.com>
+ * @author Enzo Zamora <enzozamora@gmail.com>
  */
+
 var express = require("express");
 var router = express.Router();
 var mongoose = require("mongoose");
@@ -17,7 +19,7 @@ var UserModel = require("../models/User");
  *  post:
  *    tags:
  *    - user
- *    summary: 
+ *    summary: Creates a user
  *    description: Create a new user and save it on the database
  *    consumes:
  *    - "application/json"
@@ -30,7 +32,7 @@ var UserModel = require("../models/User");
  *      description: User object to be created and saved on database
  *      required: true
  *      schema:
- *        $ref: '#/definitions/User'
+ *        $ref: '#/definitions/UserInfoReqRes'
  * 
  *    responses:
  *      200:
@@ -49,32 +51,37 @@ var UserModel = require("../models/User");
  *          $ref: "#/definitions/ErrorRequest"
  */
 
+
+const showUserInfo = (user) =>{
+  let {password, ...userInfo} = user._doc;
+  password = null;
+  return userInfo;
+}
+
+
 router.post("/", async (req, res) => {
   try {
     const { login, password } = req.body;
     /**Caso não forneça dados pra criar conta*/
-    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-      res.status(403);
-      return res.send({
-        error: "Forbidden",
-        msg: "Você não forneceu os dados para criar a conta!",
-      });
-    }
-    /**Caso esqueça login (required) ou senha (required) para criar*/
+
     if (!login || !password) {
-      res.status(403);
-      return res.send({
-        error: "Forbidden",
-        msg: "Certifique-se de fornecer login e senha!",
-      });
-    }/**Caso o login fornecido já exista */
+      
+      let responseObj = {
+        error:"Forbidden",
+        msg:"Certifique-se de fornecer login e senha!"
+      };
+      if (req.body.constructor === Object && Object.keys(req.body).length === 0){
+        responseObj.msg = "Você não forneceu nenhum dado para criação do usuário!";
+      }
+      return res.status(403).send(responseObj);
+    }
+    /**Caso o login fornecido já exista */
     else if (await UserModel.findOne({ login: login })) {
       res.status(403);
       return res.send({
         error: "Forbidden",
         msg: `O usuário ${login} já existe. Escolha outro!`,
       });
-      
     }
     /** Deu tudo certo, partindo para criação */ 
     else {
@@ -82,24 +89,20 @@ router.post("/", async (req, res) => {
       newUser.password = newUser.generateHash(password);
       let userCreated = await UserModel.create(newUser);
       console.log(`--user> Usuario [ ${login} ] cadastrado na plataforma.`);
-      /**Deu certo para não admin*/
-      if (!req.body.admin) {
-        return res.send({
-          status: "Success",
-          msg: `Usuário ${login} criado com sucesso`,
-          user: userCreated,
-        });
-      }
-      /**Deu certo criar um user admin*/ 
-      else {
-        return res.send({
-          status: "Success",
-          msg: `Usuário Administrador ${login} criado com sucesso`,
-          user: userCreated,
-        });
-      }
+
+      let responseObj = {
+        status: "Succes", 
+        msg: `Usuário [ ${login} ] criado com sucesso`, 
+        user: showUserInfo(userCreated)
+      };
+
+      /**Caso seja admin */
+      if(req.body.admin)
+        responseObj.msg = `ADMIN [ ${login} ] criado com sucesso`;
+      res.send(responseObj);
     }
-  } catch (err) { /**Deu tudo errado, fodeu */
+
+  } catch (err) { /**Something went wrong! */
     return res.status(400).send({
       error: err.message,
       msg: `Erro na criação do usuário! Tente novamente mais tarde`,
@@ -113,7 +116,7 @@ router.post("/", async (req, res) => {
  *  put:
  *    tags:
  *    - user
- *    summary: Updated user
+ *    summary: Updates a user
  *    description: Update the user info in database according to the userId on path
  *    consumes: 
  *    - "application/json"
@@ -128,16 +131,16 @@ router.post("/", async (req, res) => {
  *        type: string
  *      - in: body
  *        name: body
- *        description: Updated user object. [Can't update password]
+ *        description: Updated user object.
  *        required: true
  *        schema:
- *          $ref: '#/definitions/User'
+ *          $ref: '#/definitions/UserInfoReqRes'
  * 
  *    responses:
  *      200:
  *        description: User info updated, except the password. [Can't update password]
  *        schema: 
- *          $ref: '#/definitions/SuccessGeneralMessage'
+ *          $ref: '#/definitions/SuccessUpdateUser'
  *          
  * 
  *      400:
@@ -153,9 +156,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:userId", async (req, res) => {
   try {
-    let currentUser = await UserModel.findOne({
-      _id: req.params.userId,
-    });
+    let currentUser = await UserModel.findOne({_id: req.params.userId,});
     /**Caso não tenha sido fornecido dados para atualização */
     if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
       res.status(403);
@@ -174,6 +175,7 @@ router.put("/:userId", async (req, res) => {
     else{
       /**Os dados serão atualizados*/
       console.log(`\n --user> Usuario [ ${currentUser.login} ] sendo atualizado na plataforma.\n`);
+      
       for (const prop in req.body) {
         if (req.body.hasOwnProperty(prop) && prop !== "password") {
           currentUser[prop] = req.body[prop];
@@ -182,26 +184,24 @@ router.put("/:userId", async (req, res) => {
           var tentarTrocarSenha = true;  
         }
       }
+      /**Saved on database */
       currentUser.save();
       console.log(`\n --user> Usuario [ ${currentUser.login} ] atualizado com sucesso na plataforma.\n`);
-      res.status(200);
-      /**Tentou trocar a senha! Não pode! */
+      
+      let responseObj = {
+        status: "Success",
+        msg: `Usuário [ ${currentUser.login} ] atualizado com sucesso!`,
+        user: showUserInfo(currentUser)
+      };
+      
+      /**Caso tenha tentado trocar a senha, obterá uma mensagem diferente! */
       if(tentarTrocarSenha){
-        return res.send({
-          status:'Success',
-          msg: `Usuário ${req.body.login} atualizado com sucesso, exceto a senha. Não é possível alterar a senha de um usuário!`,
-          user: currentUser, 
-        });
+        responseObj.msg = `Usuário [ ${currentUser.login} ] atualizado com sucesso, exceto a senha. Não é possível alterar a senha de um usuário!`;
       }
-      else{ /**Dados atualizados normalmente, com sucesso! */
-        return res.send({
-          status:'Success',
-          msg: `Usuário ${req.body.login} atualizado com sucesso!`,
-          user: currentUser,
-        });
-      }
+
+      res.status(200).send(responseObj);
     }
-  } catch (err) { /**Deu merda na atualização mlk, fodeu. Deu beyblade */
+  } catch (err) { /**Something went wrong */
     return res.status(400).send({
       error: err.message,
       msg: "Erro na atualização do usuário! Tente novamente mais tarde",
@@ -215,8 +215,8 @@ router.put("/:userId", async (req, res) => {
  *    delete:
  *      tags:
  *      - user
- *      summary: Delete a user
- *      description: Delete the user object in according to the userId on path.
+ *      summary: Deletes a user
+ *      description: Deletes the user object in according to the userId on path.
  *      operationId: deleteUser
  *      produces:
  *      - "application/json"

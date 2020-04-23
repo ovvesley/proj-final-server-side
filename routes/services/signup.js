@@ -17,8 +17,8 @@ const router = express.Router();
  * /signUp:
  *    post:
  *      tags:
- *      - user
- *      summary: Create a user
+ *      - services
+ *      summary: Create a user via singUp page
  *      description: Register a new user on the database via sign up page
  *      consumes:
  *      - "application/json"
@@ -27,21 +27,21 @@ const router = express.Router();
  *      parameters:
  *      - in: body
  *        name: body
- *        description: user object to create
+ *        description: User object to create
  *        required: true
  *        schema:
- *          $ref: "#/definitions/UserLogin"
+ *          $ref: "#/definitions/UserSignUp"
  *
  *      responses:
  *        200:
  *          description: Success on creating the new user
  *          schema:
- *            $ref: '#/definitions/SuccessMessage'
+ *            $ref: '#/definitions/SuccessMessageSingUp'
  *
  *        403:
  *          description: Error deleting user
  *          schema:
- *            $ref: '#/definitions/ErrorMessage'
+ *            $ref: '#/definitions/ErrorMessageSingUp'
  *
  */
 router
