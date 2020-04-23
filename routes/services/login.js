@@ -46,7 +46,7 @@ const showUserInfo = (user) => {
  *          $ref: '#/definitions/UserInfoReqRes'
  * 
  *      403: 
- *        description: Forbidden request. Didn't supply the request body or the login or password is wrong
+ *        description: Forbidden request. Didn't supply the request body or the data (login, password) is wrong and don't belongs to an account
  *        schema: 
  *          $ref: '#/definitions/ErrorRequest'
  * 
@@ -69,11 +69,10 @@ router.post("/", async (req, res) => {
       };
       
       if (req.body.constructor === Object && Object.keys(req.body).length === 0)
-        objResMissing.msg = "Passa";
+        objResMissing.msg = "Insira login e senha!";
       return res.status(403).send(objResMissing);
 
     } else if (!(await UserModel.findOne({ login: login }))) {
-      console.log("Nao achamos nada com esse login");
       res.status(403).send({
         error: "Forbidden",
         msg: "Login e/ou senha incorreto(s)",
