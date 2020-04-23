@@ -5,7 +5,8 @@
   "scripts": {
     "start": "DEBUG=hortabackend:* node ./bin/www",
     "dev": "DEBUG=hortabackend:* nodemon ./bin/www",
-    "doc": "jsdoc -c jsdoc.json -r"
+    "doc": "jsdoc -c jsdoc.json -r",
+    "test": "mocha --timeout 30000 ./test/**/*.js --exit"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
@@ -18,8 +19,12 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "jsdoc": "^3.6.4",
+    "mocha": "^7.1.1",
     "nodemon": "^2.0.2",
+    "proxyquire": "^2.1.3",
+    "supertest": "^4.0.2",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"
   }
