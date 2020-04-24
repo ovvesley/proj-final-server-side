@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 /**
  * Configuration module for the connection with mongoDB via mongoose
  * @module config 
@@ -8,25 +10,25 @@
   * Port number for the database (mongoDB) 
   * @type {Number}
   */
- var dbPort = 27017;
+ var dbPort = process.env.DB_INTEGRATION_TEST_PORT;
 
  /**
   * The IP address for the host of the database (mongoDB)
   * @type {String|Number}
   */
- var dbHost = 'localhost';
+ var dbHost = process.env.DB_INTEGRATION_TEST_HOST;
  
  /**
   * The database name on mongoDB
   * @type {String}
   */
- var dbName = 'integrationTest';
+ var dbName = process.env.DB_INTEGRATION_TEST_NAME;
  
  /**
   * MongoDB secret key for authentication
   * @type {String}
   */
- var secretKey = '12345-67890-09876-54321';
+ var secretKey = process.env.DB_INTEGRATION_TEST_SECRET_KEY;
  
  /**
   * The URL for mongodb to access
