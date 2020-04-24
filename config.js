@@ -8,25 +8,25 @@
   * Port number for the database (mongoDB) 
   * @type {Number}
   */
-var dbPort = 27017;
+var dbPort = process.env.DB_PRODUCT_PORT;
 
 /**
  * The IP address for the host of the database (mongoDB)
  * @type {String|Number}
  */
-var dbHost = 'localhost';
+var dbHost = process.env.DB_PRODUCT_HOST;
 
 /**
  * The database name on mongoDB
  * @type {String}
  */
-var dbName = 'hortadb';
+var dbName = process.env.DB_PRODUCT_NAME;
 
 /**
  * MongoDB secret key for authentication
  * @type {String}
  */
-var secretKey = '12345-67890-09876-54321';
+var secretKey = process.env.DB_PRODUCT_SECRET_KEY;
 
 /**
  * The URL for mongodb to access
