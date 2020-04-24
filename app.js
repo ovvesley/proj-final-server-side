@@ -4,6 +4,7 @@
 */
 
 /** Dependencies necessary for the application */
+require('dotenv').config()
 var express = require("express");
 var mongoose = require("mongoose");
 var createError = require("http-errors");
