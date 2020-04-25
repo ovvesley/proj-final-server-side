@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=hortabackend:* node ./bin/www",
+    "start": "node ./bin/www",
     "dev": "DEBUG=hortabackend:* nodemon ./bin/www",
     "doc": "jsdoc -c jsdoc.json -r",
     "test": "mocha --timeout 30000 ./test/**/*.js --exit"
