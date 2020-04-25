@@ -11,7 +11,7 @@ var router = express.Router();
  *    
  */
 router.get('/', function(req, res, next) {
-  res.redirect(process.env.HORTA_FRONT_URL)
+  res.json({hello: "world"})
 });
 
 module.exports = router;
