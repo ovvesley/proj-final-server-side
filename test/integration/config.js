@@ -34,7 +34,7 @@ require('dotenv').config()
   * The URL for mongodb to access
   * @type {String}
   */
- var mongoUrl = `mongodb://${dbHost}:${dbPort}/${dbName}`
+ var mongoUrl = process.env.DB_INTEGRATION_TEST_MONGO_URL || `mongodb://${dbHost}:${dbPort}/${dbName}` 
  
  /**
   * Configuration Object mongoose-mongoDB 
