@@ -1,0 +1,220 @@
+definitions:
+  Sensor:
+    type: object
+    required:
+      - nameSensor
+    properties:
+      nameSensor:
+        type: string
+      digitalValue:
+        type: number
+      analogValue:
+        type: number
+      portNumber:
+        type: number
+
+  Microcontroller:
+    type: object
+    required:
+      - nameMicrocontroller
+      - type
+    properties:
+      nameMicrocontroller:
+        type: string
+      type:
+        type: string
+      sensors:
+        type: array
+        items:
+          type: object
+          allOf:
+            - $ref: "#/definitions/Sensor"
+
+  System:
+    type: object
+    required:
+      - nameSystem
+    properties:
+      nameSystem:
+        type: string
+      category:
+        type: string
+      microcontrollers:
+        type: array
+        items:
+          type: object
+          allOf:
+            - $ref: "#/definitions/Microcontroller"
+
+  AccountPlan:
+    type: object
+    required:
+      - namePlan
+    properties:
+      namePlan:
+        type: string
+      price:
+        type: number
+      description:
+        type: string
+
+  User:
+    type: object
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+        unique: true
+      password:
+        type: string
+        format: password
+      experienceDays:
+        type: number
+      admin: 
+        type: boolean
+        default: false
+      accountPlanType:
+        type: object
+        allOf:
+          - $ref: "#/definitions/AccountPlan"
+      systems:
+        type: array
+        items:
+          type: object
+          allOf:
+            - $ref: "#/definitions/System"
+
+  UserInfoReqRes: 
+    type: object
+    required:
+      - login
+    properties:
+      login:
+        type: string
+        unique: true
+      experienceDays:
+        type: number
+      admin: 
+        type: boolean
+        default: false
+      accountPlanType:
+        type: string
+        format: uuid
+      systems:
+        type: array
+        items:
+          type: string 
+          format: uuid
+    
+
+
+  UserSignUp:
+    type: object
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+        format: password
+      repassword:
+        type: string
+        format: password
+
+  UserLogin:
+    type: object
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+        format: password
+  
+  ErrorRequest:
+    type: object
+    properties:
+      error:
+        type: string
+        example: "Something went wrong!"
+      msg:
+        type: string
+        example: "Erro na operação! Tente novamente mais tarde!"
+      
+  ErrorServer:
+    type: object
+    properties: 
+      error:
+        type: string
+        example: "error.message from server (500)"
+      msg: 
+        type: string
+        example: "Erro na operação! Tente novamente mais tarde!"
+
+
+  SuccessGeneralMessage:
+    type: object
+    properties: 
+      status: 
+        type: string 
+        example: "Success"
+      msg: 
+        type: string
+        example: "Operação feita com sucesso!"
+
+  SuccessCreateUser:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Usuário criado com sucesso!"
+      user: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/UserInfoReqRes'
+          
+  SuccessUpdateUser:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Usuário atualizado com sucesso!"
+      user: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/UserInfoReqRes'
+              
+  ErrorMessageSingUp:
+    type: object
+    properties:
+      error:
+        type: string
+        example: "There is a user with this login in the system"
+      msg:
+        type: string
+        example: "Já existe um usuario com o login 'string'. Tente outro por favor."
+        
+  SuccessMessageSingUp:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "success"
+      msg:
+        type: string
+        example: "Usuario cadastrado com sucesso."
+  
+
+  
