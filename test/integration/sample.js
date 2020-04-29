@@ -41,8 +41,5 @@ describe("SAMPLE: sample test example", function () {
     done();
   });
 
-  after(async function () {
-    await toolsdb.dropDataBaseMongoose();
-    await toolsdb.disconnectMongoose();
-  });
+ 
 });

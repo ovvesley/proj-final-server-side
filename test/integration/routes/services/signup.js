@@ -143,8 +143,5 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  after(async function () {
-    await toolsdb.dropDataBaseMongoose();
-    await toolsdb.disconnectMongoose();
-  });
+  
 });
