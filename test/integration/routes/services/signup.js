@@ -12,8 +12,16 @@ const request = require("supertest")(app);
 
 describe("/signUp - Registro de usuario", function () {
   beforeEach(function (done) {
-    toolsdb.clearMongooseDataBase();
-    done();
+    toolsdb
+      .clearMongooseDataBase()
+      .then((response) => {
+        if (response) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
   });
 
   it("POST: /signup - Usuario sendo cadastrado com sucesso", (done) => {
@@ -81,9 +89,58 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
+  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Usuario ja existe", (done) => {
+    request
+      .post("/signup")
+      .set("Accept", "application/json")
+      .send({
+        login: "testIntegracao",
+        password: "testIntegracao",
+        repassword: "testIntegracao",
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+        let { body, status } = response;
+
+        expect(status).equals(200);
+        expect(body).to.deep.include({ status: "success" });
+
+        request
+          .post("/signup")
+          .set("Accept", "application/json")
+          .send({
+            login: "testIntegracao",
+            password: "testIntegracao",
+            repassword: "testIntegracao",
+          })
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+
+            let { body, status } = response;
+
+            expect(status).equals(403);
+            expect(body).to.deep.include.keys("error");
+
+            done();
+          });
+      });
+  });
+
   afterEach(function (done) {
-    toolsdb.clearMongooseDataBase();
-    done();
+    toolsdb
+      .clearMongooseDataBase()
+      .then((res) => {
+        if (res) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
   });
 
   after(async function () {
