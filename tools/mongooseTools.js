@@ -4,9 +4,23 @@ function isConnected() {
   return mongoose.connection.readyState === 1;
 }
 
-function clearMongooseDataBase() {
-  for (let i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].deleteMany(function () {});
+async function clearMongooseDataBase() {
+  const collections = await mongoose.connection.db.collections();
+  try {
+    for (let collection of collections) {
+      await collection.deleteOne();
+    }
+    
+    return true;
+  } catch (systemError) {
+    let error = new Error();
+    let msgerror = "Ocorreu um problema na limpeza das colecoes do db. Verifique mongooseTools.js";
+
+    error.message = msgerror;
+    error.status = 500;
+    error.systemError = systemError;
+
+    throw error;
   }
 }
 
