@@ -39,6 +39,28 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
+  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Senhas informadas diferem", (done) => {
+    request
+      .post("/signup")
+      .set("Accept", "application/json")
+      .send({
+        login: "testIntegracao",
+        password: "testIntegracao",
+        repassword: "senhaDiferente",
+      })
+      .end((err, response) => {
+        console.log(err);
+
+        let { body, status } = response;
+
+        expect(status).equals(403);
+
+        expect(body).to.deep.include.keys("error");
+
+        done();
+      });
+  });
+
   afterEach(function (done) {
     toolsdb.clearMongooseDataBase();
     done();
