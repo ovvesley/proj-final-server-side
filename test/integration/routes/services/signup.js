@@ -61,6 +61,26 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
+  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Corpo vazio", (done) => {
+    request
+      .post("/signup")
+      .set("Accept", "application/json")
+      .send({})
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+
+        let { body, status } = response;
+
+        expect(status).equals(403);
+
+        expect(body).to.deep.include.keys("error");
+
+        done();
+      });
+  });
+
   afterEach(function (done) {
     toolsdb.clearMongooseDataBase();
     done();
