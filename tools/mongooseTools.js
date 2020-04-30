@@ -4,13 +4,23 @@ function isConnected() {
   return mongoose.connection.readyState === 1;
 }
 
+async function getCollectionsDataBase() {
+  var collections;
+  try {
+    collections = await mongoose.connection.db.collections();
+  } catch (error) {
+    collections = []
+  }
+  return collections
+}
+
 async function clearMongooseDataBase() {
-  const collections = await mongoose.connection.db.collections();
+  const collections = await getCollectionsDataBase()
   try {
     for (let collection of collections) {
       await collection.deleteOne();
     }
-    
+
     return true;
   } catch (systemError) {
     let error = new Error();
