@@ -7,11 +7,17 @@ const stubs = {
   "./config": config,
 };
 
-const app = proxyquire("../../app", stubs);
 
-const request = require("supertest")(app);
 
 describe("SAMPLE: sample test example", function () {
+  var app;
+  var request;
+
+  before(function (done) {
+    app = proxyquire("../../app", stubs);
+    request = require("supertest")(app);
+    done()
+  })
   beforeEach(function (done) {
     toolsdb.clearMongooseDataBase();
     done();
@@ -41,5 +47,9 @@ describe("SAMPLE: sample test example", function () {
     done();
   });
 
- 
+  after(async function () {
+    await toolsdb.dropDataBaseMongoose();
+    await toolsdb.disconnectMongoose();
+  });
+
 });

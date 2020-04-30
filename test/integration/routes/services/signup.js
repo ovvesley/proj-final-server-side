@@ -7,10 +7,16 @@ const stubs = {
   "./config": config,
 };
 
-const app = proxyquire("../../../../app", stubs);
-const request = require("supertest")(app);
 
 describe("/signUp - Registro de usuario", function () {
+  var app;
+  var request;
+  
+  before(function (done) {
+    app = proxyquire("../../../../app", stubs);
+    request = require("supertest")(app);
+    done();
+  })
   beforeEach(function (done) {
     toolsdb
       .clearMongooseDataBase()
@@ -143,5 +149,8 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  
+  after(async function () {
+    await toolsdb.dropDataBaseMongoose();
+    await toolsdb.disconnectMongoose();
+  });
 });
