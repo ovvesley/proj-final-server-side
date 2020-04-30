@@ -11,7 +11,7 @@ const stubs = {
 describe("/signUp - Registro de usuario", function () {
   var app;
   var request;
-  
+
   before(function (done) {
     app = proxyquire("../../../../app", stubs);
     request = require("supertest")(app);
@@ -63,7 +63,9 @@ describe("/signUp - Registro de usuario", function () {
         repassword: "senhaDiferente",
       })
       .end((err, response) => {
-        console.log(err);
+        if (err) {
+          done(err);
+        }
 
         let { body, status } = response;
 
