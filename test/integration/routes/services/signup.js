@@ -8,7 +8,7 @@ const stubs = {
 };
 
 
-describe("/signUp - Registro de usuario", function () {
+describe("SUITE: /signup - user register ", function () {
   var app;
   var request;
 
@@ -30,7 +30,7 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  it("POST: /signup - Usuario sendo cadastrado com sucesso", (done) => {
+  it("POST: /signup - user register - success", (done) => {
     request
       .post("/signup")
       .set("Accept", "application/json")
@@ -53,7 +53,7 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Senhas informadas diferem", (done) => {
+  it("POST: /signup - user NOT registered - password do not match", (done) => {
     request
       .post("/signup")
       .set("Accept", "application/json")
@@ -77,7 +77,7 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Corpo vazio", (done) => {
+  it("POST: /signup - user NOT registered - body req empty", (done) => {
     request
       .post("/signup")
       .set("Accept", "application/json")
@@ -97,7 +97,7 @@ describe("/signUp - Registro de usuario", function () {
       });
   });
 
-  it("POST: /signup - Usuario nao sendo cadastrado com sucesso. Usuario ja existe", (done) => {
+  it("POST: /signup - user NOT registered - user already exists", (done) => {
     request
       .post("/signup")
       .set("Accept", "application/json")
@@ -114,7 +114,6 @@ describe("/signUp - Registro de usuario", function () {
 
         expect(status).equals(200);
         expect(body).to.deep.include({ status: "success" });
-
         request
           .post("/signup")
           .set("Accept", "application/json")
