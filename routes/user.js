@@ -91,7 +91,7 @@ router.post("/", async (req, res) => {
       console.log(`--user> Usuario [ ${login} ] cadastrado na plataforma.`);
 
       let responseObj = {
-        status: "Succes", 
+        status: "success", 
         msg: `Usuário [ ${login} ] criado com sucesso`, 
         user: showUserInfo(userCreated)
       };
