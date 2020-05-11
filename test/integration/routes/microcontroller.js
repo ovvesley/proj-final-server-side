@@ -7,7 +7,6 @@ const stubs = {
   "./config": config,
 };
 
-
 describe("SUITE: /microcontroller - microcontroller creation ", function () {
   var app;
   var request;
@@ -16,7 +15,7 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
     app = proxyquire("../../../app", stubs);
     request = require("supertest")(app);
     done();
-  })
+  });
   beforeEach(function (done) {
     toolsdb
       .clearMongooseDataBase()
@@ -36,7 +35,7 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
       .set("Accept", "application/json")
       .send({
         nameMicrocontroller: "microcontrolador1",
-	      type: "led",
+        type: "led",
       })
       .end((err, response) => {
         if (err) {
@@ -85,13 +84,31 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
         done();
       });
   });
-  
+  it("POST: /microcontroller - microcontroller isnt created - microcontroller with a inexistent sensor", (done) => {
+    request
+      .post("/microcontroller")
+      .set("Accept", "application/json")
+      .send({
+        nameMicrocontroller: "testeintegracao",
+        type: "led",
+        sensors: ["5e9e4303fb54d53bf8faa42a"],
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+        let { body, status } = response;
+        expect(status).equals(400);
+        done();
+      });
+  });
+
   it("POST: /microcontroller - microcontroller inst created - microcontroller without type", (done) => {
     request
       .post("/microcontroller")
       .set("Accept", "application/json")
       .send({
-        nameMicrocontroller:"testeintegracao",
+        nameMicrocontroller: "testeintegracao",
       })
       .end((err, response) => {
         if (err) {
@@ -112,7 +129,7 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
       .post("/microcontroller")
       .set("Accept", "application/json")
       .send({
-        nameMicrocontroller:"testeintegracao",
+        nameMicrocontroller: "testeintegracao",
         type: "led",
       })
       .end((err, response) => {
@@ -126,7 +143,7 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
           .post("/microcontroller")
           .set("Accept", "application/json")
           .send({
-            nameMicrocontroller:"testeintegracao",
+            nameMicrocontroller: "testeintegracao",
             type: "led",
             admin: true,
             expirenceDays: 30,
