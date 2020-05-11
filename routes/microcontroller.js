@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
       return res.send({
         status: "Success",
         msg: `Microcontrolador [ ${nameMicrocontroller} ] criado com sucesso`,
+        microcontroller: microcontrollerCreated._doc,
       });
     }
   } catch (err) {
@@ -67,7 +68,7 @@ router.put("/:microcontrollerId", async (req, res) => {
           error: "Forbidden",
           msg: "Forneça dados para serem atualizados!",
         });
-      }/**Caso o nome fornecido pertença a outro user */
+      }/**Caso o nome fornecido pertença a outro microcontroller */
       else if(await MicrocontrollerModel.findOne({nameMicrocontroller: req.body.nameMicrocontroller})){
           res.status(403);
           return res.send({
@@ -86,7 +87,7 @@ router.put("/:microcontrollerId", async (req, res) => {
         }
         /**Saved on database */
         currentMicrocontroller.save();
-        console.log(`\n --user> Usuario [ ${currentMicrocontroller.name} ] atualizado com sucesso na plataforma.\n`);
+        console.log(`\n --microcontroller> microcontroller [ ${currentMicrocontroller.name} ] atualizado com sucesso na plataforma.\n`);
         
         let responseObj = {
           status: "Success",

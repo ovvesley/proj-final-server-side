@@ -145,8 +145,6 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
           .send({
             nameMicrocontroller: "testeintegracao",
             type: "led",
-            admin: true,
-            expirenceDays: 30,
           })
           .end((err, response) => {
             if (err) {
@@ -156,6 +154,164 @@ describe("SUITE: /microcontroller - microcontroller creation ", function () {
             expect(status).equals(403);
             expect(body).to.deep.include({ error: "Forbidden" });
             done();
+          });
+      });
+  });
+
+  afterEach(function (done) {
+    toolsdb
+      .clearMongooseDataBase()
+      .then((res) => {
+        if (res) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  after(async function () {
+    await toolsdb.dropDataBaseMongoose();
+    await toolsdb.disconnectMongoose();
+  });
+});
+
+describe("SUITE: /microcontroller/:microcontrollerId - microcontroller update", function () {
+  var app;
+  var request;
+
+  before(function (done) {
+    app = proxyquire("../../../app", stubs);
+    request = require("supertest")(app);
+    done();
+  })
+  beforeEach(function (done) {
+    toolsdb
+      .clearMongooseDataBase()
+      .then((response) => {
+        if (response) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it("PUT: /microcontroller/microcontrollerId - updating a microcontroller - Success", (done) => {
+    request
+      .post("/microcontroller")
+      .set("Accept", "application/json")
+      .send({
+        nameMicrocontroller:"testeintegracao",
+        type:"led",
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+
+        let { body, status } = response;
+        var id = body.microcontroller._id; 
+        console.log(body.microcontroller._id);
+        expect(status).equals(200);
+        expect(body).to.deep.include({ status: "Success" });
+        request
+          .put("/microcontroller/"+id)
+          .set("Accept", "application/json")
+          .send({
+            nameMicrocontroller:"atualizado"
+          })
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            let { body, status } = response;
+            expect(status).equals(200);
+            expect(body).to.deep.include({ status: "Success" });
+            done();
+          });
+      });
+  });
+
+  it("PUT: /microcontroller/microcontrollerId - microcontroller isnt updated - req body is empty", (done) => {
+    request
+      .post("/microcontroller")
+      .set("Accept", "application/json")
+      .send({
+        nameMicrocontroller:"testeintegracao",
+        type:"led",
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+
+        let { body, status } = response;
+        var id = body.microcontroller._id; 
+        expect(status).equals(200);
+        expect(body).to.deep.include({ status: "Success" });
+        request
+          .put("/microcontroller/"+id)
+          .set("Accept", "application/json")
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            let { body, status } = response;
+            expect(status).equals(403);
+            expect(body).to.deep.include({ error: "Forbidden" });
+            done();
+          });
+      });
+  });
+
+  it("PUT: /microcontroller/:microcontrollerId - microcontroller isnt updated -  nameMicrocontroller already exists ", (done) => {
+    request
+      .post("/microcontroller")
+      .set("Accept", "application/json")
+      .send({
+        nameMicrocontroller:"testeintegracao",
+        type: "testeintegracao",
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+        let { body, status } = response;
+        var id = body.microcontroller._id;
+        expect(status).equals(200);
+        expect(body).to.deep.include({ status: "Success" });
+        request
+          .post("/microcontroller")
+          .set("Accept", "application/json")
+          .send({
+            nameMicrocontroller:"testeintegracao2",
+            type: "led",
+          })
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            let { body, status } = response;
+            expect(status).equals(200);
+            expect(body).to.deep.include({ status:"Success" });
+            request
+              .put("/microcontroller/"+id)
+              .set("Accept", "application/json")
+              .send({
+                nameMicrocontroller:"testeintegracao2",
+              })
+              .end((err, response) =>{
+                if(err) {
+                  done(err);
+                }
+                let { body, status } = response;
+                expect(status).equals(403);
+                expect(body).to.deep.include({ error:"Forbidden"})
+                done();
+              });
           });
       });
   });
