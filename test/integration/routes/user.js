@@ -39,8 +39,6 @@ describe("SUITE: /user - user creation ", function () {
         password:"testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5eb873b31078775faad721cc"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -55,6 +53,27 @@ describe("SUITE: /user - user creation ", function () {
         done();
       });
   });
+  it("POST: /user - user isnt created - user with a imaginary AccountPlan or System", (done) => {
+    request
+      .post("/user")
+      .set("Accept", "application/json")
+      .send({
+        login:"testeintegracao",
+        password:"testeintegracao",
+        admin: true,
+        expirenceDays: 30,
+        systems: ["5e8a7e34a232365ca08c0cfd"],
+	      accountPlanType:"5e8a7c8f03adef5b9981b842", 
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+        let { body, status } = response;
+        expect(status).equals(400);
+        done();
+      });
+  });
 
   it("POST: /user - user isnt created - user without login", (done) => {
     request
@@ -64,8 +83,6 @@ describe("SUITE: /user - user creation ", function () {
         password:"testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -80,7 +97,7 @@ describe("SUITE: /user - user creation ", function () {
         done();
       });
   });
-
+  
   it("POST: /user - user inst created - user without password", (done) => {
     request
       .post("/user")
@@ -88,9 +105,7 @@ describe("SUITE: /user - user creation ", function () {
       .send({
         login:"testeintegracao",
         admin: true,
-        expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
+        expirenceDays: 30
       })
       .end((err, response) => {
         if (err) {
@@ -132,8 +147,6 @@ describe("SUITE: /user - user creation ", function () {
         password: "testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -150,8 +163,6 @@ describe("SUITE: /user - user creation ", function () {
             password: "testeintegracao",
             admin: true,
             expirenceDays: 30,
-            systems: ["5e8a7e34a232365ca08c0cfd"],
-            accountPlanType:"5e8a7c8f03adef5b9981b842"
           })
           .end((err, response) => {
             if (err) {
@@ -214,8 +225,6 @@ describe("SUITE: /user/:userId - user update", function () {
         password:"testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -254,8 +263,6 @@ describe("SUITE: /user/:userId - user update", function () {
         password:"testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -290,8 +297,6 @@ describe("SUITE: /user/:userId - user update", function () {
         password: "testeintegracao",
         admin: true,
         expirenceDays: 30,
-        systems: ["5e8a7e34a232365ca08c0cfd"],
-        accountPlanType:"5e8a7c8f03adef5b9981b842"
       })
       .end((err, response) => {
         if (err) {
@@ -309,8 +314,6 @@ describe("SUITE: /user/:userId - user update", function () {
             password: "testeintegracao2",
             admin: true,
             expirenceDays: 30,
-            systems: ["5e8a7e34a232365ca08c0cfd"],
-            accountPlanType:"5e8a7c8f03adef5b9981b842"
           })
           .end((err, response) => {
             if (err) {
@@ -400,10 +403,53 @@ describe("SUITE: /user - delete user ", function () {
         expect(status).equals(200);
         expect(body).to.deep.include({ status: "success" });
         request
-          .delete("/user/"+id);
-          expect(status).equals(200);
-          expect(body).to.deep.include({ status: "success" });
-        done();
+          .delete("/user/"+id)
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            expect(status).equals(200);
+            expect(body).to.deep.include({ status: "success" });
+            done();
+          });    
+      });
+  });
+  it("DELETE /user/:userId - user isnt deleted - deleting a user that already deleted ", (done) => {
+    request
+      .post("/user")
+      .set("Accept", "application/json")
+      .send({
+        login:"testeintegracao",
+        password:"testeintegracao",
+	      admin: true,
+	      expirenceDays: 30,
+      })
+      .end((err, response) => {
+        if (err) {
+          done(err);
+        }
+        let { body, status } = response;
+        var id = body.user._id;
+        expect(status).equals(200);
+        expect(body).to.deep.include({ status: "success" });
+        request
+          .delete("/user/"+id)
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            expect(status).equals(200);
+            request
+              .delete("/user/"+id)
+              .end((err, response) => {
+                if (err) {
+                  done(err);
+                }
+                let { body, status } = response;
+                expect(status).equals(400);
+              done();
+            });
+          });    
       });
   });
 
