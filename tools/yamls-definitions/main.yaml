@@ -108,7 +108,21 @@ definitions:
           type: string 
           format: uuid
     
-
+  SystemInfoReqRes: 
+    type: object
+    required:
+      - nameSystem
+    properties:
+      nameSystem:
+        type: string
+        unique: true
+      category:
+        type: string
+      microcontrollers:
+        type: array
+        items:
+          type: string 
+          format: uuid
 
   UserSignUp:
     type: object
@@ -195,7 +209,35 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/UserInfoReqRes'
-              
+
+  SuccessCreateSystem:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Sistema criado com sucesso!"
+      system: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/SystemInfoReqRes'
+          
+  SuccessUpdateSystem:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Sistema atualizado com sucesso!"
+      system: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/SystemInfoReqRes'
+
   ErrorMessageSingUp:
     type: object
     properties:
