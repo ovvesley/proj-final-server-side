@@ -34,10 +34,10 @@ router.post("/", async (req, res) => {
         if(!nameSystem){
             let responseObj = {
                 error: "Forbidden",
-                msg: "Certifique de fornecer um nome para o sistema!"
+                msg: "Certifique de fornecer um nome para o Sistema!"
             };
             if(reqBodyIsEmpty(req.body)){
-                responseObj.msg = `Você não forneceu nenhum dado para ${op} do sistema`
+                responseObj.msg = `Você não forneceu nenhum dado para ${op} do Sistema`
             }
                 return res.status(403).send(responseObj);
         }
@@ -62,7 +62,41 @@ router.post("/", async (req, res) => {
 });
 
 /**Update System */
+router.put("/:systemId", async(req, res)=> {
+    const op = 'atualização';
+    try {
+        if(reqBodyIsEmpty(req.body)){
+            res.status(403).send({
+                error:"Forbidden",
+                msg:"Forneça dados para atualizar seu Sistema!"
+            });
+        }
+        else if(await SystemModel.findOne({nameSystem:req.body.nameSystem})){
+            res.status(403).send({
+                error:"Forbidden",
+                msg:`Já existe um Sistema com nome [ ${req.body.nameSystem} ]! Escolha outro nome!`
+            });
+        }
+        else{
+            /**Dados serão atualizados */
+            const currentSystem = await SystemModel.findById(req.params.systemId);
 
+            for (const prop in req.body) {
+                if (req.body.hasOwnProperty(prop)) {
+                  currentSystem[prop] = req.body[prop];
+                }
+            }
+            currentSystem.save();
+            res.status(200).send({
+                status:"Success",
+                msg: `Sistema [ ${req.body.nameSystem} ] atualizado com sucesso!`,
+                system: currentSystem
+            });
+        }
+    } catch (err) {
+        res.status(400).send(errorHandler(err.message, op));
+    }
+});
 
 /**Delete system */
 router.delete("/:systemId", async(req, res) => {
@@ -72,7 +106,7 @@ router.delete("/:systemId", async(req, res) => {
         if(!await SystemModel.findById(id)){
             return res.status(410).send({
                 error:"Sistema inexistente!",
-                msg: "Não existe sistema correspondente para efetuar exclusão!"
+                msg: "Não existe Sistema correspondente para efetuar exclusão!"
             });
         }
         else{
