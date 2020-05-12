@@ -108,6 +108,23 @@ definitions:
           type: string 
           format: uuid
     
+  MicrocontrollerInfoReqRes: 
+    type: object
+    required:
+      - nameMicrocontroller
+    properties:
+      nameMicrocontroller:
+        type: string
+        unique: true
+        required: true
+      type:
+        type: string
+        format: uuid
+      sensors:
+        type: array
+        items:
+          type: string 
+          format: uuid
 
 
   UserSignUp:
@@ -181,7 +198,7 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/UserInfoReqRes'
-          
+
   SuccessUpdateUser:
     type: object
     properties:
@@ -195,6 +212,35 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/UserInfoReqRes'
+
+  SuccessCreateMicrocontroller:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Microcontrolador criado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/MicrocontrollerInfoReqRes'
+          
+              
+  SuccessUpdateMicrocontroller:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Microcontrolador atualizado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/MicrocontrollerInfoReqRes'
               
   ErrorMessageSingUp:
     type: object
