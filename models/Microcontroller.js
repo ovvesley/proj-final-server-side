@@ -27,9 +27,24 @@ const MicrocontrollerSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: SensorSchema,
       required:false,
+      validate: {
+        validator: validatorSensors
+      }
     },
   ],
 });
+
+async function validatorSensors (value) {
+  try {
+    const responseSensor = await SensorSchema.findById(value).exec();
+    if(!responseSensor){
+      return false;
+    }
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 var Microcontroller = mongoose.model("Microcontroller", MicrocontrollerSchema);
 

@@ -41,11 +41,17 @@ const UserSchema = new mongoose.Schema({
   accountPlanType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: AccountPlanSchema,
+    validate: {
+      validator: validatorAccountPlanType
+    }
   },
   systems: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: SystemSchema,
+      validate: {
+        validator: validatorSystems
+      }
     },
   ],
 });
@@ -58,6 +64,30 @@ UserSchema.methods.generateHash = function(password) {
 UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
+
+async function validatorSystems (value) {
+  try {
+    const responseSystem = await SystemSchema.findById(value).exec();
+    if(!responseSystem){
+      return false;
+    }
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function validatorAccountPlanType(value){
+  try {
+    const responseAccountPlan = await AccountPlanSchema.findById(value).exec();
+    if(!responseAccountPlan){
+      return false;
+    }
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 var User = mongoose.model("User", UserSchema);
 
