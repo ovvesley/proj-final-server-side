@@ -20,7 +20,9 @@ var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var signupRouter = require("./routes/services/signup");
 var loginRouter = require("./routes/services/login");
+
 var microcontrollerRouter = require("./routes/microcontroller"); 
+const systemRouter = require("./routes/system");
 
 var app = express();
 
@@ -69,9 +71,12 @@ app.use(cors());
 /**Routes */
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+
 app.use("/signUp", signupRouter);
 app.use("/login", loginRouter);
 app.use("/microcontroller", microcontrollerRouter); 
+
+app.use("/system", systemRouter);
 
 /**Swagger*/
 app.use("/docs/swagger-doc", swagger.swaggerUI.serve, swagger.swaggerUI.setup(swagger.swaggerDocs));
