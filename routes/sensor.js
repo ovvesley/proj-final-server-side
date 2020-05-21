@@ -57,4 +57,49 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:sensorId", async (req, res) => {
+    try {
+      let currentSensor = await SensorModel.findOne({_id: req.params.sensorId,});
+      /**Caso não tenha sido fornecido dados para atualização */
+      if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+        res.status(403);
+        return res.send({
+          error: "Forbidden",
+          msg: "Forneça dados para serem atualizados!",
+        });
+      }/**Caso o nome fornecido pertença a outro sensor */
+      else if(await SensorModel.findOne({nameSensor: req.body.nameSensor})){
+          res.status(403);
+          return res.send({
+            error:"Forbidden",
+            msg:"Nome já existente! Escolha outro nome!"
+          });
+      }
+      else{
+        /**Os dados serão atualizados*/
+        console.log(`\n  Sensor [ ${currentSensor.nameSensor} ] sendo atualizado na plataforma.\n`);
+        
+        for (const prop in req.body) {
+          if (req.body.hasOwnProperty(prop)) {
+            currentSensor[prop] = req.body[prop];
+          }
+        }
+        /**Saved on database */
+        currentSensor.save();
+        console.log(`\n --sensor> sensor [ ${currentSensor.name} ] atualizado com sucesso na plataforma.\n`);
+        
+        let responseObj = {
+          status: "Success",
+          msg: `Sensor [ ${currentSensor.nameSensor} ] atualizado com sucesso!`,
+        };
+  
+        res.status(200).send(responseObj);
+      }
+    } catch (err) { /**Something went wrong */
+      return res.status(400).send({
+        error: err.message,
+        msg: "Erro na atualização do Sensor! Tente novamente mais tarde",
+      });
+    }
+  });
 module.exports = router;
