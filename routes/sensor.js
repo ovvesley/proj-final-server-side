@@ -102,4 +102,21 @@ router.put("/:sensorId", async (req, res) => {
       });
     }
   });
+router.delete("/:sensorId", async (req, res) =>{
+    try {
+        const id = mongoose.Types.ObjectId(req.params.sensorId);
+        let sensorRemoved = await SensorModel.findByIdAndRemove(id);
+        console.log(`\n Sensor [ ${sensorRemoved.nameSensor} ] removido da plataforma.\n`);
+        res.status(200);
+        return res.send({
+          status: "Success",
+          msg: `Sensor ${sensorRemoved.nameSensor} removido com sucesso!`,
+        });
+      } catch (err) {
+        return res.status(400).send({
+          error: err.message,
+          msg: "Erro na exclusão do Sensor! Tente novamente mais tarde",
+        });
+      }
+})
 module.exports = router;
