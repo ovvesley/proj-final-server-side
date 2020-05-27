@@ -310,3 +310,100 @@ describe("SUITE: /sensor - sensor creation ", function () {
       await toolsdb.disconnectMongoose();
     });
   });
+  describe("SUITE: /sensor - delete sensor ", function () {
+    var app;
+    var request;
+  
+    before(function (done) {
+      app = proxyquire("../../../app", stubs);
+      request = require("supertest")(app);
+      done();
+    });
+    beforeEach(function (done) {
+      toolsdb
+        .clearMongooseDataBase()
+        .then((response) => {
+          if (response) {
+            done();
+          }
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+  
+    it("DELETE /sensor/:sensorId - delete sensor - Success ", (done) => {
+      request
+        .post("/sensor")
+        .set("Accept", "application/json")
+        .send({
+            nameSensor: "sensor",
+            digitalValue: 100,
+	        analogValue: 1, 
+	        portNumber:11,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
+          let { body, status } = response;
+          var id = body.sensor._id;
+          expect(status).equals(200);
+          expect(body).to.deep.include({ status: "Success" });
+          request.delete("/sensor/" + id).end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            expect(status).equals(200);
+            expect(body).to.deep.include({ status: "Success" });
+            done();
+          });
+        });
+    });
+    it("DELETE /sensor/:sensorId - sensor isnt deleted - deleting a sensor that already deleted ", (done) => {
+      request
+        .post("/sensor")
+        .set("Accept", "application/json")
+        .send({
+            nameSensor: "sensor",
+            digitalValue: 100,
+	        analogValue: 1, 
+	        portNumber:11,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
+          let { body, status } = response;
+          var id = body.sensor._id;
+          expect(status).equals(200);
+          expect(body).to.deep.include({ status: "Success" });
+          request.delete("/sensor/" + id).end((err, response) => {
+            if (err) {
+              done(err);
+            }
+            expect(status).equals(200);
+            request.delete("/sensor/" + id).end((err, response) => {
+              if (err) {
+                done(err);
+              }
+              let { body, status } = response;
+              expect(status).equals(400);
+              done();
+            });
+          });
+        });
+    });
+  
+    afterEach(function (done) {
+      toolsdb.clearMongooseDataBase();
+      done();
+    });
+  
+    after(async function () {
+      await toolsdb.dropDataBaseMongoose();
+      await toolsdb.disconnectMongoose();
+    });
+  });
+  
+  
