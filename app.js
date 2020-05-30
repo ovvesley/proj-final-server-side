@@ -20,7 +20,7 @@ var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var signupRouter = require("./routes/services/signup");
 var loginRouter = require("./routes/services/login");
-
+var sensorRouter = require("./routes/sensor"); 
 var microcontrollerRouter = require("./routes/microcontroller"); 
 const systemRouter = require("./routes/system");
 
@@ -75,7 +75,7 @@ app.use("/user", userRouter);
 app.use("/signUp", signupRouter);
 app.use("/login", loginRouter);
 app.use("/microcontroller", microcontrollerRouter); 
-
+app.use("/sensor", sensorRouter); 
 app.use("/system", systemRouter);
 
 /**Swagger*/
