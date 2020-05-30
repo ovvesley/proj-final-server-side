@@ -106,8 +106,8 @@ definitions:
         type: array
         items:
           type: string 
-          format: uuid
-    
+          format: uuid    
+
   SystemInfoReqRes: 
     type: object
     required:
@@ -119,6 +119,20 @@ definitions:
       category:
         type: string
       microcontrollers:
+
+  MicrocontrollerInfoReqRes: 
+    type: object
+    required:
+      - nameMicrocontroller
+    properties:
+      nameMicrocontroller:
+        type: string
+        unique: true
+        required: true
+      type:
+        type: string
+        format: uuid
+      sensors:
         type: array
         items:
           type: string 
@@ -195,7 +209,7 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/UserInfoReqRes'
-          
+
   SuccessUpdateUser:
     type: object
     properties:
@@ -210,6 +224,7 @@ definitions:
         allOf: 
           - $ref: '#/definitions/UserInfoReqRes'
 
+
   SuccessCreateSystem:
     type: object
     properties:
@@ -223,7 +238,7 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/SystemInfoReqRes'
-          
+
   SuccessUpdateSystem:
     type: object
     properties:
@@ -238,25 +253,32 @@ definitions:
         allOf: 
           - $ref: '#/definitions/SystemInfoReqRes'
 
-  ErrorMessageSingUp:
-    type: object
-    properties:
-      error:
-        type: string
-        example: "There is a user with this login in the system"
-      msg:
-        type: string
-        example: "Já existe um usuario com o login 'string'. Tente outro por favor."
-        
-  SuccessMessageSingUp:
+
+  SuccessCreateMicrocontroller:
     type: object
     properties:
       status:
         type: string
-        example: "success"
+        example: "Success"
       msg:
         type: string
-        example: "Usuario cadastrado com sucesso."
-  
+        example: "Microcontrolador criado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/MicrocontrollerInfoReqRes'
 
-  
+
+  SuccessUpdateMicrocontroller:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Microcontrolador atualizado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/MicrocontrollerInfoReqRes'
