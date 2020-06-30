@@ -278,6 +278,116 @@ describe("SUITE: /system - update system request", function () {
     });
   });
 
+  describe("SUITE: /system - delete system request", function () {
+    var app;
+    var request;
+
+    before(function (done) {
+      app = proxyquire("../../../app", stubs);
+      request = require("supertest")(app);
+      done();
+    });
+    beforeEach(function (done) {
+      toolsdb
+        .clearMongooseDataBase()
+        .then((response) => {
+          if (response) {
+            done();
+          }
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it("DELETE: /system - delete system - success", (done) => {
+      User.create({ login: "s", password: "testIntegracao" }).then((user, err) => {
+        if (err) {
+          return;
+        }
+        request
+          .post("/system")
+          .set("Accept", "application/json")
+          .send({
+            nameSystem: "teste",
+            category: "string",
+            userId: user.id,
+          })
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+
+            let { body, status } = response;
+
+            let { system } = body;
+            let idToDelete = system._id;
+
+            request
+              .delete(`/system/${idToDelete}`)
+              .set("Accept", "application/json")
+              .send()
+              .end((err, response) => {
+                if (err) {
+                  done(err);
+                }
+
+                let { body, status } = response;
+
+                expect(status).equals(200);
+                expect(body).to.deep.include({ status: "Success" });
+
+                done();
+              });
+          });
+      });
+    });
+
+    it("DELETE: /system - delete system - error", (done) => {
+      User.create({ login: "s", password: "testIntegracao" }).then((user, err) => {
+        if (err) {
+          return;
+        }
+        request
+          .post("/system")
+          .set("Accept", "application/json")
+          .send({
+            nameSystem: "teste",
+            category: "string",
+            userId: user.id,
+          })
+          .end((err, response) => {
+            if (err) {
+              done(err);
+            }
+
+            let { body, status } = response;
+
+            let { system } = body;
+            let idToDelete = "5efb9c826829b92d534d5bcf";
+
+            request
+              .delete(`/system/${idToDelete}`)
+              .set("Accept", "application/json")
+              .send()
+              .end((err, response) => {
+                if (err) {
+                  done(err);
+                }
+
+                let { body, status } = response;
+
+                console.log(body);
+
+                expect(status).equals(410);
+
+                done();
+              });
+          });
+      });
+    });
+  });
+
   afterEach(function (done) {
     toolsdb
       .clearMongooseDataBase()
