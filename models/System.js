@@ -6,6 +6,7 @@
  */
 const mongoose = require("mongoose");
 const MicrocontrollerSchema = require('./Microcontroller'); 
+const UserSchema = require('./User'); 
 
 /**
  * SystemSchema schema
@@ -16,6 +17,10 @@ const SystemSchema = new mongoose.Schema({
     type: String,
     trim: true,
     unique: true,
+    required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
   category: {

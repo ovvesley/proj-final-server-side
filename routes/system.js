@@ -20,8 +20,9 @@ const errorHandler = (err, op) => {
 };
 
 const reqBodyIsEmpty = (body) => {
-  if (body.constructor === Object && Object.keys(body).length === 0)
+  if (body.constructor === Object && Object.keys(body).length === 0) {
     return true;
+  }
 };
 
 /**
@@ -65,15 +66,19 @@ const reqBodyIsEmpty = (body) => {
 router.post("/", async (req, res) => {
   const op = "criação";
   try {
-    const { nameSystem, category, microcontrollers } = req.body;
-    if (!nameSystem) {
+    const { nameSystem, category, microcontrollers, userId } = req.body;
+    if (!nameSystem || !userId) {
       let responseObj = {
         error: "Forbidden",
         msg: "Certifique de fornecer um nome para o Sistema!",
       };
+      if (!userId) {
+        responseObj.msg = `Você não forneceu o userId para ${op} do Sistema`;
+      }
       if (reqBodyIsEmpty(req.body)) {
         responseObj.msg = `Você não forneceu nenhum dado para ${op} do Sistema`;
       }
+
       return res.status(403).send(responseObj);
     } else if (await SystemModel.findOne({ nameSystem: nameSystem })) {
       return res.status(403).send({
