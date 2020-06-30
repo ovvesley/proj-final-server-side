@@ -2,6 +2,7 @@ const proxyquire = require("proxyquire");
 const config = require("../../../config");
 const toolsdb = require("../../../tools/mongooseTools");
 const expect = require("chai").expect;
+const User = require("../../../models/User");
 
 const stubs = {
   "./config": config,
@@ -30,25 +31,34 @@ describe("SUITE: /system - system request", function () {
   });
 
   it("POST: /system - creating a system - success", (done) => {
-    request
-      .post("/system")
-      .set("Accept", "application/json")
-      .send({
-        nameSystem: "dddddd",
-        category: "string",
-      })
-      .end((err, response) => {
-        if (err) {
-          done(err);
-        }
+    User.create({ login: "s", password: "testIntegracao" }).then((res, err) => {
+      if (err) {
+        return;
+      }
 
-        let { body, status } = response;
+      request
+        .post("/system")
+        .set("Accept", "application/json")
+        .send({
+          nameSystem: "dddddd",
+          category: "string",
+          userId: res.id,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
 
-        expect(status).equals(200);
-        expect(body).to.deep.include({ status: "Success" });
+          let { body, status } = response;
 
-        done();
-      });
+          console.log(body, status);
+
+          expect(status).equals(200);
+          expect(body).to.deep.include({ status: "Success" });
+
+          done();
+        });
+    });
   });
 
   it("POST: /system - system isnt created - req body is empty", (done) => {
@@ -88,43 +98,49 @@ describe("SUITE: /system - system request", function () {
   });
 
   it("POST: /system - system inst created - system already exists ", (done) => {
-    request
-      .post("/system")
-      .set("Accept", "application/json")
-      .send({
-        nameSystem: "dddddd",
-        category: "string",
-      })
-      .end((err, response) => {
-        if (err) {
-          done(err);
-        }
+    User.create({ login: "s", password: "testIntegracao" }).then((user, err) => {
+      if (err) {
+        return;
+      }
+      request
+        .post("/system")
+        .set("Accept", "application/json")
+        .send({
+          nameSystem: "dddddd",
+          category: "string",
+          userId: user.id,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
 
-        let { body, status } = response;
+          let { body, status } = response;
 
-        expect(status).equals(200);
-        expect(body).to.deep.include({ status: "Success" });
+          expect(status).equals(200);
+          expect(body).to.deep.include({ status: "Success" });
 
-        request
-          .post("/system")
-          .set("Accept", "application/json")
-          .send({
-            nameSystem: "dddddd",
-            category: "string",
-          })
-          .end((err, response) => {
-            if (err) {
-              done(err);
-            }
+          request
+            .post("/system")
+            .set("Accept", "application/json")
+            .send({
+              nameSystem: "dddddd",
+              category: "string",
+              userId: user.id,
+            })
+            .end((err, response) => {
+              if (err) {
+                done(err);
+              }
 
-            let { body, status } = response;
+              let { body, status } = response;
 
-            expect(status).equals(403);
+              expect(status).equals(403);
 
-            done();
-
-          });
-      });
+              done();
+            });
+        });
+    });
   });
 
   afterEach(function (done) {
@@ -145,5 +161,3 @@ describe("SUITE: /system - system request", function () {
     await toolsdb.disconnectMongoose();
   });
 });
-
- 
