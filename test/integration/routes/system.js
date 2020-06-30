@@ -161,3 +161,138 @@ describe("SUITE: /system - system request", function () {
     await toolsdb.disconnectMongoose();
   });
 });
+
+describe("SUITE: /system - update system request", function () {
+  var app;
+  var request;
+
+  before(function (done) {
+    app = proxyquire("../../../app", stubs);
+    request = require("supertest")(app);
+    done();
+  });
+  beforeEach(function (done) {
+    toolsdb
+      .clearMongooseDataBase()
+      .then((response) => {
+        if (response) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  it("PUT: /system - creating and updating name system - success", (done) => {
+    User.create({ login: "s", password: "testIntegracao" }).then((user, err) => {
+      if (err) {
+        return;
+      }
+
+      request
+        .post("/system")
+        .set("Accept", "application/json")
+        .send({
+          nameSystem: "teste",
+          category: "string",
+          userId: user.id,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
+
+          let { body, status } = response;
+
+          let { system } = body;
+          let idToUpdate = system._id;
+
+          request
+            .put(`/system/${idToUpdate}`)
+            .set("Accept", "application/json")
+            .send({
+              nameSystem: "aaaa",
+              category: "string",
+              userId: user.id,
+            })
+            .end((err, response) => {
+              if (err) {
+                done(err);
+              }
+
+              let { body, status } = response;
+
+              expect(status).equals(200);
+              expect(body).to.deep.include({ status: "Success" });
+
+              done();
+            });
+        });
+    });
+  });
+
+  it("PUT: /system - creating and updating category system - success", (done) => {
+    User.create({ login: "s", password: "testIntegracao" }).then((user, err) => {
+      if (err) {
+        return;
+      }
+
+      request
+        .post("/system")
+        .set("Accept", "application/json")
+        .send({
+          nameSystem: "teste",
+          category: "string",
+          userId: user.id,
+        })
+        .end((err, response) => {
+          if (err) {
+            done(err);
+          }
+
+          let { body, status } = response;
+
+          let { system } = body;
+          let idToUpdate = system._id;
+
+          request
+            .put(`/system/${idToUpdate}`)
+            .set("Accept", "application/json")
+            .send({
+              category: "other category",
+            })
+            .end((err, response) => {
+              if (err) {
+                done(err);
+              }
+
+              let { body, status } = response;
+
+              expect(status).equals(200);
+              expect(body).to.deep.include({ status: "Success" });
+
+              done();
+            });
+        });
+    });
+  });
+
+  afterEach(function (done) {
+    toolsdb
+      .clearMongooseDataBase()
+      .then((res) => {
+        if (res) {
+          done();
+        }
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  after(async function () {
+    await toolsdb.dropDataBaseMongoose();
+    await toolsdb.disconnectMongoose();
+  });
+});
