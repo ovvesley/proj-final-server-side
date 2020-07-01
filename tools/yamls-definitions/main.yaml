@@ -39,6 +39,8 @@ definitions:
         type: string
       category:
         type: string
+      userId:
+        type: string
       microcontrollers:
         type: array
         items:
@@ -117,6 +119,8 @@ definitions:
         type: string
         unique: true
       category:
+        type: string
+      userId:
         type: string
       microcontrollers:
 
