@@ -334,3 +334,9 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/Sensor'
+
+  SuccessListSystem:
+    type: array
+    items:
+      $ref: '#/definitions/Sensor'
+    

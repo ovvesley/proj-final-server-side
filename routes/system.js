@@ -28,6 +28,53 @@ const reqBodyIsEmpty = (body) => {
 /**
  * @swagger
  * /system:
+ *  get:
+ *    tags:
+ *    - system
+ *    summary: list system by user
+ *    description: List all system by user
+ *    consumes:
+ *    - "application/json"
+ *    produces:
+ *    - "application/json"
+ *    operationId: createSystem
+ *    parameters:
+ *      - in: query
+ *        name: userId
+ *        schema:
+ *          type: string
+ *          description: userId of systems
+ *
+ *    responses:
+ *      200:
+ *        description: List all system by user
+ *        schema:
+ *          $ref: '#/definitions/SuccessListSystem'
+ *
+ *      400:
+ *        description: Bad request. Error creating the System.
+ *        schema:
+ *          $ref: '#/definitions/ErrorRequest'
+ *
+ *      403:
+ *        description: Forbidden request. You didn't supply any data to the body, fogot the required one (nameSystem) or the name chosen is already being used
+ *        schema:
+ *          $ref: "#/definitions/ErrorRequest"
+ */
+
+router.get("/", async (req, res) => {
+  let { userId } = req.query;
+  try {
+    let response = await SystemModel.find({ userId }).exec();
+    return res.json(response);
+  } catch (error) {
+    res.json(errorHandler(error.toString(), "Listagem de Sistemas"));
+  }
+});
+
+/**
+ * @swagger
+ * /system:
  *  post:
  *    tags:
  *    - system
