@@ -286,3 +286,51 @@ definitions:
         type: object
         allOf: 
           - $ref: '#/definitions/MicrocontrollerInfoReqRes'
+  
+
+          
+
+
+  SuccessUpdateSensor:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Sensor atualizado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/Sensor'
+
+
+  SuccessDeleteSensor:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Excluindo Sensor com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/Sensor'
+
+
+  SuccessCreateSensor:
+    type: object
+    properties:
+      status:
+        type: string
+        example: "Success"
+      msg:
+        type: string
+        example: "Sensor criado com sucesso!"
+      microcontroller: 
+        type: object
+        allOf: 
+          - $ref: '#/definitions/Sensor'
